@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class UserMealsUtil {
@@ -25,25 +26,49 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMeal> userMealOut = new ArrayList<>();
-        HashMap<LocalDate, Integer> exceededMap = new HashMap<>();
+        Map<LocalDate, Integer> exceededMap = new HashMap<>();
+        for (UserMeal meal : mealList) {
+            exceededMap.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
+        }
+        List<UserMealWithExceed> userMealWithExceeds = new ArrayList<>();
         for (UserMeal meal : mealList) {
             LocalDateTime dateTime = meal.getDateTime();
             if (TimeUtil.isBetween(dateTime.toLocalTime(), startTime, endTime)) {
-                userMealOut.add(new UserMeal(dateTime, meal.getDescription(), meal.getCalories()));
-            }
-            exceededMap.merge(dateTime.toLocalDate(), meal.getCalories(), Integer::sum);
-        }
-        List<UserMealWithExceed> userMealWithExceeds = new ArrayList<>();
-        for (UserMeal aUserMealOut : userMealOut) {
-            LocalDateTime dateTime = aUserMealOut.getDateTime();
-            Integer calories = exceededMap.getOrDefault(dateTime.toLocalDate(), caloriesPerDay);
-            if (calories > caloriesPerDay) {
-                userMealWithExceeds.add(new UserMealWithExceed(dateTime, aUserMealOut.getDescription(), aUserMealOut.getCalories(), false));
-            } else {
-                userMealWithExceeds.add(new UserMealWithExceed(dateTime, aUserMealOut.getDescription(), aUserMealOut.getCalories(), true));
+                boolean exceed = exceededMap.get(dateTime.toLocalDate()) > caloriesPerDay;
+                userMealWithExceeds.add(new UserMealWithExceed(dateTime, meal.getDescription(), meal.getCalories(), exceed));
             }
         }
         return userMealWithExceeds;
     }
+
+    public static List<UserMealWithExceed> getFilteredWithExceeded2(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        return mealList.stream()
+                .collect(Collectors.collectingAndThen(
+                        Collectors.groupingBy(
+                                (e -> e.getDateTime().toLocalDate()),
+                                Collectors.toList()),
+                        map -> map.entrySet().stream()))
+                .map(x -> x.getValue().stream()
+                        .filter(e -> TimeUtil.isBetween(e.getDateTime().toLocalTime(),startTime, endTime))
+                        .map(t -> new UserMealWithExceed(t.getDateTime(), t.getDescription(), t.getCalories(),
+                                x.getValue().stream().mapToInt(UserMeal::getCalories).sum() > caloriesPerDay))
+                        .collect(Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                Collections::unmodifiableList))
+                )
+                .collect(Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                Collections::addAll));
+//                        .forEach(t -> new UserMealWithExceed(t.getDateTime(), t.getDescription(), t.getCalories(),
+//                                x.getValue().stream().mapToInt(UserMeal::getCalories).sum() > caloriesPerDay))
+
+//                .collect(Collectors.toList())
+//                );
+
+//                                        .collect(Collectors.toList(),(x -> TimeUtil.isBetween(x.getDateTime().toLocalTime(),startTime, endTime))
+//                                        .mapToInt(UserMeal::getCalories).sum() > caloriesPerDay))))
+//                .filter(x -> TimeUtil.isBetween(x.getValue().forEach(e -> e.getDateTime().toLocalDate());getDateTime().toLocalTime(),startTime, endTime)
+//        return null;
+    }
 }
+
