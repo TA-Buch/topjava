@@ -51,10 +51,8 @@ public class UserMealsUtil {
                        map -> map.entrySet().stream()))
                 .map(x -> x.getValue().stream()
                         .filter(e -> TimeUtil.isBetween(e.getDateTime().toLocalTime(),startTime, endTime))
-                        .peek(t -> System.out.println(t.getDateTime().toString() + t.getCalories()))
                         .map(t -> new UserMealWithExceed(t.getDateTime(), t.getDescription(), t.getCalories(),
                                 x.getValue().stream().mapToInt(UserMeal::getCalories).sum() > caloriesPerDay))
-                        .peek(System.out::println)
                         .collect(Collectors.collectingAndThen(
                                 Collectors.toCollection(ArrayList::new),
                                 Collections::unmodifiableList))//checkedList))
