@@ -21,7 +21,7 @@ public class DBUtil {
                 InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("/src/db.properties");
               //  prop.load(inputStream);
                 String driver = "com.mysql.jdbc.Driver";//prop.getProperty("driver");
-                String url = "jdbc:mysql://localhost:3306/topjavadb";//prop.getProperty("url");
+                String url = "jdbc:mysql://localhost:3306/topjavadb?useUnicode=true&characterEncoding=UTF-8"; //prop.getProperty("url");
                 String user = "tjuser";//prop.getProperty("user");
                 String password = "user";//prop.getProperty("password");
                 Class.forName(driver);

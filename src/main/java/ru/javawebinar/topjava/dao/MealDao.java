@@ -3,11 +3,7 @@ package ru.javawebinar.topjava.dao;
 import ru.javawebinar.topjava.db.DBUtil;
 import ru.javawebinar.topjava.model.Meal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -24,12 +20,12 @@ import java.util.List;
         public void addMeal(Meal meal) {
             try {
                 PreparedStatement preparedStatement = connection
-                        .prepareStatement("insert into meals(id_meal, datitime, description, calories) values (?, ?, ?, ? )");
+                        .prepareStatement("insert into meals(id_meal, datetime, description, calories) values (null, ?, ?, ? )");
                 // Parameters start with 1
-                preparedStatement.setRowId(1, null);
-                preparedStatement.setDate(2, new java.sql.Date(meal.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli()));
-                preparedStatement.setString(3, meal.getDescription());
-                preparedStatement.setInt(4, meal.getCalories());
+//                preparedStatement.setRowId(1, default);
+                preparedStatement.setTimestamp(1, Timestamp.valueOf(meal.getDateTime()));
+                preparedStatement.setString(2, meal.getDescription());
+                preparedStatement.setInt(3, meal.getCalories());
                 preparedStatement.executeUpdate();
 
             } catch (SQLException e) {
@@ -53,10 +49,10 @@ import java.util.List;
         public void updateMeal(Meal meal) {
             try {
                 PreparedStatement preparedStatement = connection
-                        .prepareStatement("update meals set datitime=?, description=?, calories=? " +
+                        .prepareStatement("update meals set datetime=?, description=?, calories=? " +
                                 "where id_meal=?");
                 // Parameters start with 1
-                preparedStatement.setDate(1, new java.sql.Date(meal.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli()));
+                preparedStatement.setTimestamp(1, Timestamp.valueOf(meal.getDateTime()));
                 preparedStatement.setString(2, meal.getDescription());
                 preparedStatement.setInt(3, meal.getCalories());
                 preparedStatement.setInt(4, meal.getId());
@@ -85,7 +81,7 @@ import java.util.List;
             return meals;
         }
 
-        public Meal getUserById(int mealId) {
+        public Meal getMealById(int mealId) {
             Meal meal = null;
             try {
                 PreparedStatement preparedStatement = connection.
