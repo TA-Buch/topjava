@@ -1,3 +1,5 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -8,6 +10,7 @@
 <hr>
 <ul>
     <li><a href="users">Users</a></li>
+    <li><a href="meals?action=listMeal">Meals</a></li>
 </ul>
 </body>
 </html>
