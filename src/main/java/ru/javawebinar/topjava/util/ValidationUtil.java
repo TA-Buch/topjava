@@ -1,9 +1,11 @@
 package ru.javawebinar.topjava.util;
 
 
+import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+@Service
 public class ValidationUtil {
 
     public static <T> T checkNotFound(T object, int id) {
