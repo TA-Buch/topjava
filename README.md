@@ -1,3 +1,4 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/325d7e5cce8e46e6ae9e3978d1b7a0b1)](https://app.codacy.com/gh/TA-Buch/topjava/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [Java Enterprise Online Project](https://javaops.ru/view/topjava)
 ===============================
 Разработка полнофункционального Spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей с использованием наиболее популярных инструментов и технологий Java: Maven, Spring MVC, Security, JPA(Hibernate), REST(Jackson), Bootstrap (css,js), DataTables, jQuery + plugins, Java 8 Stream and Time API и хранением в базах данных Postgresql и HSQLDB.
@@ -36,6 +37,7 @@
 ### [Демо приложения](http://javaops-demo.ru/topjava)
 
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 5. [Системы управления версиями. Git](doc/video5-vcs-git.md)</a>
+
 
 ##  ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 6. <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFZDdaaU5fZEo4X3c/view?resourcekey=0-DvpzWIlMHZ7KX_v1SMuiAw" name="project">Работа с проектом (выполнять инструкции)</a>
 - **ВНИМАНИЕ: выбирайте для проекта простой пусть без пробелов и русских букв, например, `c:\projects\topjava\` (Windows). Иначе впоследствии будут проблемы**
