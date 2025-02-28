@@ -1,16 +1,47 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user=:user"),
+        @NamedQuery(name = Meal.UPDATE, query = "UPDATE FROM Meal m SET m.dateTime=:dateTime," +
+                "m.calories=:calories, m.description=:description WHERE m.id=:id AND m.user=:user"),
+        @NamedQuery(name = Meal.GET_BY_ID, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user=:user"),
+        @NamedQuery(name = Meal.GET_BY_USER, query = "SELECT m FROM Meal m WHERE m.user = :user ORDER BY m.dateTime desc"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query =
+                "SELECT m FROM Meal m WHERE m.user=:user " +
+                        "AND m.dateTime > :startDate AND  m.dateTime < :endDate " +
+                        "ORDER BY m.dateTime desc"),
+})
+@Entity
+@Table(name = "meal")
 public class Meal extends AbstractBaseEntity {
+
+    public static final String DELETE = "Meal.delete";
+    public static final String GET_BY_ID = "Meal.get";
+    public static final String UPDATE = "Meal.save";
+    public static final String GET_BY_USER = "Meal.getAll";
+    public static final String GET_BETWEEN = "Meal.getBetweenHalfOpen";
+
+    @Column(name = "date_time", nullable = false, unique = true)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 4000)
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @Range(min = 1, max = 10000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
