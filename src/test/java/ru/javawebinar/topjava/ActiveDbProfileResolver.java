@@ -12,8 +12,11 @@ public class ActiveDbProfileResolver extends DefaultActiveProfilesResolver {
     String[] resolve(@NonNull Class<?> aClass) {
         // https://stackoverflow.com/a/52438829/548473
         String[] activeProfiles = super.resolve(aClass);
-        String[] activeProfilesWithDb = Arrays.copyOf(activeProfiles, activeProfiles.length + 1);
-        activeProfilesWithDb[activeProfiles.length] = Profiles.getActiveDbProfile();
-        return activeProfilesWithDb;
+        String[] activeProfilesWithDbAndRepo = Arrays.copyOf(activeProfiles, activeProfiles.length + 2);
+
+        activeProfilesWithDbAndRepo[activeProfiles.length] = Profiles.getActiveDbProfile();
+        activeProfilesWithDbAndRepo[activeProfiles.length + 1] = Profiles.getActiveRepositoryProfile();
+
+        return activeProfilesWithDbAndRepo;
     }
 }

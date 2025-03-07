@@ -24,4 +24,14 @@ public class Profiles {
             throw new IllegalStateException("Could not find DB driver");
         }
     }
+
+    public static String getActiveRepositoryProfile() {
+//        if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", null)) {
+            return DATAJPA;
+//        } else if (ClassUtils.isPresent("javax.persistence.EntityManager", null)) {
+//            return JPA;
+//        } else {
+//            return JDBC;
+//        }
+    }
 }
