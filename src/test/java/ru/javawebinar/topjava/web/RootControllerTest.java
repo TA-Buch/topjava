@@ -13,6 +13,7 @@ import static ru.javawebinar.topjava.MealTestData.meals;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
 
+
 class RootControllerTest extends AbstractControllerTest {
 
     @Test
