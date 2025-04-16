@@ -12,6 +12,14 @@ const ctx = {
     }
 };
 
+$(".datetime-filter, #dateTime").datetimepicker({
+    format: 'Y-m-d H:i',
+    step: 15,
+    lang: 'ru',
+    dayOfWeekStart: 1,
+    scrollInput: false
+});
+
 function clearFilter() {
     $("#filter")[0].reset();
     $.get(mealAjaxUrl, updateTableByData);
@@ -20,33 +28,39 @@ function clearFilter() {
 $(function () {
     makeEditable(
         $("#datatable").DataTable({
+            "ajax": {
+                "url": mealAjaxUrl,
+
+                "dataSrc": ""
+            },
             "paging": false,
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
+                    "render": function (data, type, row) {
+                        return data.replace("T", " ");
+                    }
+                },
+                { "data": "description" },
+                { "data": "calories" },
+                {
+                    "render": renderEditBtn,
+                    "orderable": false,
+                    "defaultContent": ""
                 },
                 {
-                    "data": "description"
-                },
-                {
-                    "data": "calories"
-                },
-                {
-                    "defaultContent": "Edit",
-                    "orderable": false
-                },
-                {
-                    "defaultContent": "Delete",
-                    "orderable": false
+                    "render": renderDeleteBtn,
+                    "orderable": false,
+                    "defaultContent": ""
                 }
             ],
-            "order": [
-                [
-                    0,
-                    "desc"
-                ]
-            ]
+            "createdRow": function (row, data) {
+                if (data.excess) {
+                    $(row).addClass("excess");
+                }
+            },
+            "order": [[0, "desc"]]
         })
     );
 });

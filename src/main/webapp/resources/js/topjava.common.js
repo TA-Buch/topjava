@@ -42,6 +42,7 @@ function deleteRow(id) {
 }
 
 function updateTableByData(data) {
+    console.log("Получили данные:", data);
     ctx.datatableApi.clear().rows.add(data).draw();
 }
 
